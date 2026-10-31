@@ -11,10 +11,12 @@ function lib.init()
     
     function toret1.window(name,shortcut)
         local toret2={}
-        local window=Instance.new("Frame",ui)
+        local window=Instance.new("TextButton",ui)
         window.BackgroundColor3=Color3.new(0,0,0)
         window.Size=UDim2.fromScale(1,1)
         window.BackgroundTransparency=.25
+        window.Modal=true
+        window.Text=""
 
         local logo=Instance.new("TextLabel",window)
         logo.Size=UDim2.fromScale(1,.1)
