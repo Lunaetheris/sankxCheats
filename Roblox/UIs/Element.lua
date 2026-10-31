@@ -11,12 +11,10 @@ function lib.init()
     
     function toret1.window(name,shortcut)
         local toret2={}
-        local window=Instance.new("TextButton",ui)
+        local window=Instance.new("Frame",ui)
         window.BackgroundColor3=Color3.new(0,0,0)
         window.Size=UDim2.fromScale(1,1)
         window.BackgroundTransparency=.25
-        window.Modal=true
-        window.Text=""
 
         local logo=Instance.new("TextLabel",window)
         logo.Size=UDim2.fromScale(1,.1)
@@ -35,7 +33,7 @@ function lib.init()
             if inp.KeyCode==sht then
               window.Visible = not window.Visible
             end
-          end
+          end)
         end
 
         function toret2.tab(name2)
@@ -59,7 +57,9 @@ function lib.init()
                 local button=Instance.new("TextButton",tab)
                 button.BackgroundColor3=Color3.new(1,1,1)
                 button.TextSize=12
+                button.Size=UDim2.fromScale(1,1)
                 button.Text=name3 or "button"
+                button.Modal=true
                 toret4.clicked=button.MouseButton1Click
                 toret4.instance=button
                 
