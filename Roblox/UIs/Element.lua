@@ -81,7 +81,7 @@ function lib.init()
                 button.BackgroundColor3=Color3.new(1,1,1)
                 button.TextSize=12
                 button.Size=UDim2.fromScale(1,1)
-                button.Text=name3 or "label"
+                button.Text=text1 or "label"
                 toret4.instance=button
                 return toret4
             end
