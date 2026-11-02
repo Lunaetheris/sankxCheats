@@ -1,6 +1,6 @@
 local gui=game:GetService("CoreGui")
 local uis=game:GetService("UserInputService")
-local versionn="0.1.0"
+local versionn="0.1.4"
 
 local lib={}
 
