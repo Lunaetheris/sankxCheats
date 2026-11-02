@@ -10,13 +10,15 @@ function lib.init()
     
     function toret1.window(name,shortcut)
         local toret2={}
-        local window=Instance.new("TextButton",ui)
+        local window=Instance.new("Frame",ui)
         window.BackgroundColor3=Color3.new(0,0,0)
         window.Size=UDim2.fromScale(1,1)
         window.BackgroundTransparency=.25
-        window.Modal=true
-        window.Text=""
-        window.AutoButtonColor=false
+        local modalw=Instance.new("TextButton",window)
+        modalw.Size=UDim2.new(0,0,0,0)
+        modalw.BackgroundTransparency=1
+        modalw.Text=""
+        modalw.Modal=true
 
         local wlogo=if name then name else "Element "..versionn
 
