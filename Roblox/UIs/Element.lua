@@ -20,6 +20,8 @@ function lib.init()
         modalw.Text=""
         modalw.Modal=true
 
+        local amtoftabs=1
+
         local wlogo=if name then name else "Element "..versionn
 
         local logo=Instance.new("TextLabel",window)
@@ -46,10 +48,11 @@ function lib.init()
         function toret2.tab(name2)
             local toret3={}
             local amtofstuff=1
+            
         
             local tab=Instance.new("Frame",window)
             tab.Size=UDim2.fromOffset(200,50)
-            tab.Position=UDim2.fromOffset(50,50)
+            tab.Position=UDim2.fromOffset(amtoftabs*200+5,50)
             tab.BackgroundColor3=Color3.new(1,1,1)
             local UIDragger=Instance.new("UIDragDetector",tab)
             local List=Instance.new("UIListLayout",tab)
@@ -60,6 +63,7 @@ function lib.init()
             logo1.TextSize=12
             logo1.Text=name2 or "tab"
             logo1.Name=tostring(amtofstuff)
+            amtoftabs+=1
 
             function toret3.button(name3)
                 local toret4={}
