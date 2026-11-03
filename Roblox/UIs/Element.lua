@@ -1,6 +1,6 @@
 local gui=game:GetService("CoreGui")
 local uis=game:GetService("UserInputService")
-local versionn="0.1.4"
+local versionn="0.1.5"
 
 local lib={}
 
@@ -57,12 +57,33 @@ function lib.init()
             local UIDragger=Instance.new("UIDragDetector",tab)
             local List=Instance.new("UIListLayout",tab)
             List.SortOrder=Enum.SortOrder.Name
+            local tframe=Instance.new("Frame")
+            tframe.BackgroundTransparency=1
+            tframe.Size=UDim2.fromScale(1,1)
             local logo1=Instance.new("TextLabel",tab)
             logo1.BackgroundTransparency=1
-            logo1.Size=UDim2.fromScale(1,1)
+            logo1.Size=UDim2.fromScale(.6,.9)
+            logo1.Position=UDim2.fromScale(.05,.5)
+            logo1.AnchorPoint=Vector2.new(0,.5)
             logo1.TextSize=12
             logo1.Text=name2 or "tab"
-            logo1.Name=tostring(amtofstuff)
+            tframe.Name=tostring(amtofstuff)
+            local minimize=Instance.new("TextButton",logo1)
+            minimize.Size=UDim2.fromOffset(30,30)
+            minimize.Position=UDim2.fromOffset(.95,.5)
+            minimize.AnchorPoint=Vector2.new(1,.5)
+            minimize.BackgroundColor3=Color3.new(1,1,1)
+            minimize.TextScaled=true
+            minimize.Text="-"
+
+            minimize.MouseButton1Click:Connect(function()
+                for _, button in tab:GetChildren() do
+                    if button:IsA("TextLabel") or button:IsA("TextLabel") then
+                        button.Visible = not button.Visible
+                    end
+                end
+            end)
+            
             amtoftabs+=1
 
             function toret3.button(name3)
