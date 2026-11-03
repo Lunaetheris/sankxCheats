@@ -1,6 +1,6 @@
 local gui=game:GetService("CoreGui")
 local uis=game:GetService("UserInputService")
-local versionn="0.1.5"
+local versionn="0.1.5.1"
 
 local lib={}
 
@@ -57,10 +57,10 @@ function lib.init()
             local UIDragger=Instance.new("UIDragDetector",tab)
             local List=Instance.new("UIListLayout",tab)
             List.SortOrder=Enum.SortOrder.Name
-            local tframe=Instance.new("Frame")
+            local tframe=Instance.new("Frame",tab)
             tframe.BackgroundTransparency=1
             tframe.Size=UDim2.fromScale(1,1)
-            local logo1=Instance.new("TextLabel",tab)
+            local logo1=Instance.new("TextLabel",tframe)
             logo1.BackgroundTransparency=1
             logo1.Size=UDim2.fromScale(.6,.9)
             logo1.Position=UDim2.fromScale(.05,.5)
@@ -68,7 +68,7 @@ function lib.init()
             logo1.TextSize=12
             logo1.Text=name2 or "tab"
             tframe.Name=tostring(amtofstuff)
-            local minimize=Instance.new("TextButton",logo1)
+            local minimize=Instance.new("TextButton",tframe)
             minimize.Size=UDim2.fromOffset(30,30)
             minimize.Position=UDim2.fromOffset(.95,.5)
             minimize.AnchorPoint=Vector2.new(1,.5)
