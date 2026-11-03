@@ -1,6 +1,6 @@
 local gui=game:GetService("CoreGui")
 local uis=game:GetService("UserInputService")
-local versionn="0.1.5.1"
+local versionn="0.1.5.2"
 
 local lib={}
 
@@ -70,7 +70,7 @@ function lib.init()
             tframe.Name=tostring(amtofstuff)
             local minimize=Instance.new("TextButton",tframe)
             minimize.Size=UDim2.fromOffset(30,30)
-            minimize.Position=UDim2.fromOffset(.95,.5)
+            minimize.Position=UDim2.fromScale(.95,.5)
             minimize.AnchorPoint=Vector2.new(1,.5)
             minimize.BackgroundColor3=Color3.new(1,1,1)
             minimize.TextScaled=true
@@ -78,7 +78,7 @@ function lib.init()
 
             minimize.MouseButton1Click:Connect(function()
                 for _, button in tab:GetChildren() do
-                    if button:IsA("TextLabel") or button:IsA("TextLabel") then
+                    if button:IsA("TextLabel") or button:IsA("TextButton") then
                         button.Visible = not button.Visible
                     end
                 end
