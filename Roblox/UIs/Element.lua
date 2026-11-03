@@ -1,6 +1,6 @@
 local gui=game:GetService("CoreGui")
 local uis=game:GetService("UserInputService")
-local versionn="0.1.5.2"
+local versionn="0.1.5.3"
 
 local lib={}
 
@@ -19,6 +19,10 @@ function lib.init()
         modalw.BackgroundTransparency=1
         modalw.Text=""
         modalw.Modal=true
+
+        local wgrad=Instance.new("UIGradient",window)
+        wgrad.Transparency=NumberSequence.new(10,0)
+        wgrad.Rotation=90
 
         local amtoftabs=1
 
