@@ -5,14 +5,47 @@ local lib=loadstring(game:HttpGet('https://raw.githubusercontent.com/Lunaetheris
 local init=lib.init()
 local win=init.window("Flee the fuckility","X")
 local esp=win.tab("ESP")
-
-local espstogs={
-    "computer","exit","beast"
-}
+local aut=win.tab("Automation")
 
 local plrstats={
     "TempPlayerStatsModule","SavedPlayerStatsModule"
 }
+
+function getPlr(id)
+	if typeof(id)=="number"then
+		for _, playr in plrs:GetPlayers() do
+			if playr.UserId==id then return playr end
+		end
+    elseif typeof(id)=="string"then
+        return plrs:FindFirstChild(id)	
+	end
+end
+
+function getChar(plr)
+	if typeof(plr)=="string" or typeof(plr)=="number"then
+		local playr=getPlr(plr)
+        if playr then
+        	return playr.Character
+        end
+    elseif typeof(plr)=="Instance"then
+        if plr:IsA("Player")then
+        	return plr.Character	
+        end
+	end
+end
+
+function gettpsm(player)
+	if typeof(player)=="Instance" then
+		if player:IsA("Player")then
+			return player:FindFirstChild("TempPlayerStatsModule")
+		end
+    elseif typeof(player)=="string"then
+        local playr=getPlr(player)	
+        if playr then
+        	return playr:FindFirstChild("TempPlayerStatsModule")
+        end
+	end
+end
 
 function tween(a,b,c)task.spawn(function()ts:Create(a,b,c):Play()end)end
 function pchighlightcolor(high,color)
@@ -163,8 +196,49 @@ local esps={
     },
 }
 
+local auts={
+    SelfReviveOnCapture={
+        func=function()
+        	local tpsm=gettpsm(lplr)
+            if tpsm then
+            	return tpsm.Captured:GetPropertyChangedSignal("Value"):Connect(function()
+            		if tpsm.Captured.Value==true then
+            			local char=getChar(lplr)
+                        if char then
+                        	char.Humanoid.Health=0
+                        end
+            		end
+            	end)
+            end
+        end,
+        thread=nil,
+        cleanup=function()
+        	
+        end,
+    }
+}
+
 function toggleESPthreadfor(type_)
 	local cesp=esps[type_]
+    if cesp then
+    	if typeof(cesp.thread)~="RBXScriptConnection"then
+    		cesp.thread=cesp.func()
+            return true
+        else
+        	cesp.thread:Disconnect()
+            cesp.thread=nil
+            local s,e=pcall(cesp.cleanup)
+            if not s then
+            	warn("=== FLEE THE FUCKILITY ERROR ===")
+                warn(tostring(e))
+            end
+            return false
+    	end
+    end
+end
+
+function toggleAUTthreadfor(type_)
+	local cesp=auts[type_]
     if cesp then
     	if typeof(cesp.thread)~="RBXScriptConnection"then
     		cesp.thread=cesp.func()
@@ -202,7 +276,7 @@ for _, splr in plrs:GetPlayers() do
 end
 end]]
 
-for _, toggle in espstogs do
+for toggle, _ in esps do
 	local button = esp.button(toggle)
     button.instance.BackgroundColor3=Color3.new(1,0,0)
     button.clicked:Connect(function()
@@ -217,4 +291,17 @@ for _, toggle in espstogs do
     end)
 end
 
-
+for toggle, _ in auts do
+	local button = aut.button(toggle)
+    button.instance.BackgroundColor3=Color3.new(1,0,0)
+    button.clicked:Connect(function()
+    	local state=toggleAUTthreadfor(toggle)
+        if state==true then
+        	button.instance.BackgroundColor3=Color3.new(0,1,0)
+        elseif state==false then
+            button.instance.BackgroundColor3=Color3.new(1,0,0)
+        elseif state==nil then
+            button.instance.BackgroundColor3=Color3.new(0,0,1)		
+        end
+    end)
+end
