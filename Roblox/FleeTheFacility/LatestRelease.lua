@@ -1,12 +1,19 @@
 local ts=game:GetService("TweenService")
 local plrs=game:GetService("Players")
+local rs=game:GetService("ReplicatedStorage")
+local runs=game:GetService("RunService")
 local lplr=plrs.LocalPlayer
 local lib=loadstring(game:HttpGet('https://raw.githubusercontent.com/Lunaetheris/sankxCheats/refs/heads/main/Roblox/UIs/Element.lua'))()
 local init=lib.init()
 local win=init.window("Flee the fuckility","X")
 local esp=win.tab("ESP")
 local aut=win.tab("Automation")
-
+local cre=win.tab("Credits")
+local exec="Unidentified Executor"
+pcall(function()
+	exec=identifyexecutor()
+end)
+local re=rs.RemoteEvent
 local plrstats={
     "TempPlayerStatsModule","SavedPlayerStatsModule"
 }
@@ -201,12 +208,43 @@ local auts={
         func=function()
         	local tpsm=gettpsm(lplr)
             if tpsm then
+            	if tpsm.Captured.Value==true then
+        			local char=getChar(lplr)
+                    if char then
+                    	char.Humanoid.Health=0
+                    end
+            	end
             	return tpsm.Captured:GetPropertyChangedSignal("Value"):Connect(function()
             		if tpsm.Captured.Value==true then
             			local char=getChar(lplr)
                         if char then
                         	char.Humanoid.Health=0
                         end
+            		end
+            	end)
+            end
+        end,
+        thread=nil,
+        cleanup=function()
+        	
+        end,
+    },
+    ComputerPuzzle={
+        func=function()
+        	local tpsm=gettpsm(lplr)
+            if tpsm then
+            	if tpsm.TimingGoalPosition.Value>0 then
+        			while tpsm.TimingGoalPosition.Value~=0 do
+            			re:FireServer("SetPlayerMinigameResult", true)
+                        runs.RenderStepped:Wait()
+            		end
+            	end
+            	return tpsm.TimingGoalPosition:GetPropertyChangedSignal("Value"):Connect(function()
+            		if tpsm.TimingGoalPosition.Value>0 then
+            			while tpsm.TimingGoalPosition.Value~=0 do
+            				re:FireServer("SetPlayerMinigameResult", true)
+                            runs.RenderStepped:Wait()
+            			end
             		end
             	end)
             end
@@ -305,3 +343,8 @@ for toggle, _ in auts do
         end
     end)
 end
+
+cre.label("UI: Element")
+cre.label("Creator: Luna")
+cre.label("Mental Support: Horaq")
+cre.label("Executor: "..exec)
