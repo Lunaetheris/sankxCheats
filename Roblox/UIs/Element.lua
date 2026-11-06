@@ -1,7 +1,7 @@
 local gui=game:GetService("CoreGui")
 local ts=game:GetService("TweenService")
 local uis=game:GetService("UserInputService")
-local versionn="0.1.7"
+local versionn="0.1.7.2"
 
 local lib={}
 lib.nver="Element "..versionn
@@ -234,7 +234,7 @@ function lib.init()
 
 			local tab=Instance.new("Frame",window)
 			tab.Size=UDim2.fromOffset(200,50)
-			tab.Position=UDim2.fromOffset(amtoftabs*200+5,50)
+			tab.Position=UDim2.fromOffset(amtoftabs*200+10,50)
 			tab.BackgroundColor3=uiclrset.primary
 			cornertab("top").Parent=tab
 			local UIDragger=Instance.new("UIDragDetector",tab)
