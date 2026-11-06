@@ -234,7 +234,7 @@ function lib.init()
 
 			local tab=Instance.new("Frame",window)
 			tab.Size=UDim2.fromOffset(200,50)
-			tab.Position=UDim2.fromOffset(amtoftabs*200+10,50)
+			tab.Position=UDim2.fromOffset((amtoftabs*200)+(amtoftab*5),50)
 			tab.BackgroundColor3=uiclrset.primary
 			cornertab("top").Parent=tab
 			local UIDragger=Instance.new("UIDragDetector",tab)
