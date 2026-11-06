@@ -4,6 +4,7 @@ local uis=game:GetService("UserInputService")
 local versionn="0.1.7"
 
 local lib={}
+lib.nver="Element "..versionn
 local m3e = {}
 local function clamp(n, min, max)
 	return math.clamp(n, min, max)
