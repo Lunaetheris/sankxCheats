@@ -1,7 +1,7 @@
 local gui=game:GetService("CoreGui")
 local ts=game:GetService("TweenService")
 local uis=game:GetService("UserInputService")
-local versionn="0.1.6"
+local versionn="0.1.7"
 
 local lib={}
 local m3e = {}
@@ -156,191 +156,306 @@ end
 function cornertab(type_)
 	if type_=="top"then
 		local s=Instance.new("UICorner")
-        s.Name="corner"
-        s.CornerRadius=UDim.new(0,0)
-        s.TopLeftRadius=UDim.new(0,15)
-        s.TopRightRadius=UDim.new(0,15)
-        s.BottomLeftRadius=UDim.new(0,5)
-        s.BottomRightRadius=UDim.new(0,5)
-        return s
-    elseif type_=="mid"then
-        local s=Instance.new("UICorner")
-        s.Name="corner"
-        s.CornerRadius=UDim.new(0,5)
-        return s
-    elseif type_=="bot"then
-    	local s=Instance.new("UICorner")
-        s.Name="corner"
-        s.CornerRadius=UDim.new(0,0)
-        s.TopLeftRadius=UDim.new(0,5)
-        s.TopRightRadius=UDim.new(0,5)
-        s.BottomLeftRadius=UDim.new(0,15)
-        s.BottomRightRadius=UDim.new(0,15)
-        return s
+		s.Name="corner"
+		s.CornerRadius=UDim.new(0,0)
+		s.TopLeftRadius=UDim.new(0,15)
+		s.TopRightRadius=UDim.new(0,15)
+		s.BottomLeftRadius=UDim.new(0,5)
+		s.BottomRightRadius=UDim.new(0,5)
+		return s
+	elseif type_=="mid"then
+		local s=Instance.new("UICorner")
+		s.Name="corner"
+		s.CornerRadius=UDim.new(0,5)
+		return s
+	elseif type_=="bot"then
+		local s=Instance.new("UICorner")
+		s.Name="corner"
+		s.CornerRadius=UDim.new(0,0)
+		s.TopLeftRadius=UDim.new(0,5)
+		s.TopRightRadius=UDim.new(0,5)
+		s.BottomLeftRadius=UDim.new(0,15)
+		s.BottomRightRadius=UDim.new(0,15)
+		return s
 	end
 end
 
 function lib.init()
-    local toret1={}
-    local ui=Instance.new("ScreenGui",gui)
-    
-    function toret1.window(name,shortcut,scl)
-        local toret2={}
-        local uiclrset=if typeof(scl)=="Color3"then m3e.fromsource(scl) else m3e.fromsource(Color3.fromRGB(104,196,150))
-        local window=Instance.new("Frame",ui)
-        window.BackgroundColor3=Color3.new(0,0,0)
-        window.Size=UDim2.fromScale(1,1)
-        window.BackgroundTransparency=.25
-        local modalw=Instance.new("TextButton",window)
-        modalw.Size=UDim2.new(0,0,0,0)
-        modalw.BackgroundTransparency=1
-        modalw.Text=""
-        modalw.Modal=true
+	local toret1={}
+	local ui=Instance.new("ScreenGui",gui)
 
-        local wgrad=Instance.new("UIGradient",window)
-        wgrad.Transparency=NumberSequence.new(10,0)
-        wgrad.Rotation=90
+	function toret1.window(name,shortcut,scl)
+		local toret2={}
+		local uiclrset=if typeof(scl)=="Color3"then m3e.makescheme(scl,true) else m3e.makescheme(Color3.fromRGB(86, 129, 91),true)
+		local window=Instance.new("Frame",ui)
+		window.BackgroundColor3=Color3.new(0,0,0)
+		window.Size=UDim2.fromScale(1,1)
+		window.BackgroundTransparency=.25
+		local modalw=Instance.new("TextButton",window)
+		modalw.Size=UDim2.new(0,0,0,0)
+		modalw.BackgroundTransparency=1
+		modalw.Text=""
+		modalw.Modal=true
 
-        local amtoftabs=1
+		local wgrad=Instance.new("UIGradient",window)
+		wgrad.Transparency=NumberSequence.new(10,0)
+		wgrad.Rotation=90
 
-        local wlogo=if name then name else "Element "..versionn
+		local amtoftabs=1
 
-        local logo=Instance.new("TextLabel",window)
-        logo.Size=UDim2.fromScale(1,.1)
-        logo.BackgroundTransparency=1
-        logo.Position=UDim2.fromScale(.5,1)
-        logo.AnchorPoint=Vector2.new(.5,1)
-        logo.TextScaled=true
-        logo.Text=wlogo.." | Show/Hide With "..shortcut
-        logo.TextTransparency=.25
-        logo.TextColor3=Color3.new(.9,.9,.9)
+		local wlogo=if name then name else "Element "..versionn
 
-        local sht
-        local s,e = pcall(function() sht = Enum.KeyCode[shortcut] end)
-        if s and sht then
-          uis.InputBegan:Connect(function(inp,b)
-            if b then return end
-            if inp.KeyCode==sht then
-              window.Visible = not window.Visible
-            end
-          end)
-        end
+		local logo=Instance.new("TextLabel",window)
+		logo.Size=UDim2.fromScale(1,.1)
+		logo.BackgroundTransparency=1
+		logo.Position=UDim2.fromScale(.5,1)
+		logo.AnchorPoint=Vector2.new(.5,1)
+		logo.TextScaled=true
+		logo.Text=wlogo.." | Show/Hide With "..shortcut
+		logo.TextTransparency=.25
+		logo.TextColor3=Color3.new(.9,.9,.9)
 
-        function toret2.tab(name2)
-            local toret3={}
-            local amtofstuff=0
-            local minimized=false
+		local sht
+		local s,e = pcall(function() sht = Enum.KeyCode[shortcut] end)
+		if s and sht then
+			uis.InputBegan:Connect(function(inp,b)
+				if b then return end
+				if inp.KeyCode==sht then
+					window.Visible = not window.Visible
+				end
+			end)
+		end
 
-        
-            local tab=Instance.new("Frame",window)
-            tab.Size=UDim2.fromOffset(200,50)
-            tab.Position=UDim2.fromOffset(amtoftabs*200+5,50)
-            tab.BackgroundColor3=uiclrset.primary
-            cornertab("top").Parent=tab
-            local UIDragger=Instance.new("UIDragDetector",tab)
-            local List=Instance.new("UIListLayout",tab)
-            List.SortOrder=Enum.SortOrder.Name
-            List.Padding=UDim.new(0,5)
-            local tframe=Instance.new("Frame",tab)
-            tframe.BackgroundTransparency=1
-            tframe.Size=UDim2.fromScale(1,1)
-            local logo1=Instance.new("TextLabel",tframe)
-            logo1.BackgroundTransparency=1
-            logo1.Size=UDim2.fromScale(.6,.9)
-            logo1.Position=UDim2.fromScale(.05,.5)
-            logo1.AnchorPoint=Vector2.new(0,.5)
-            logo1.TextColor3=Color3.new(1,1,1)
-            logo1.TextSize=12
-            logo1.Text=name2 or "tab"
-            tframe.Name=tostring(amtofstuff)
-            local minimize=Instance.new("TextButton",tframe)
-            minimize.Size=UDim2.fromOffset(30,30)
-            minimize.Position=UDim2.fromScale(.95,.5)
-            minimize.AnchorPoint=Vector2.new(1,.5)
-            minimize.BackgroundColor3=uiclrset.tertiary
-            minimize.TextColor3=Color3.new(1,1,1)
-            minimize.TextScaled=true
-            cornertab("mid").Parent=minimize
-            minimize.Text="-"
+		function toret2.tab(name2)
+			local toret3={}
+			local amtofstuff=0
+			local minimized=false
 
-            minimize.MouseButton1Click:Connect(function()
-            	if minimized then
-            		for i=amtofstuff,1,-1 do
-            		    tween(tab[tostring(i)].scale,TweenInfo.new(.125,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{Scale=1})
-                        task.wait(.1)
-            	    end
-                    minimized=false
-                else
-                    for i=amtofstuff,1,-1 do
-            		    tween(tab[tostring(i)].scale,TweenInfo.new(.125,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{Scale=0})
-                        task.wait(.075)
-            	    end	
-                    minimized=true
-            	end
-            end)
-            
-            amtoftabs+=1
+			local tab=Instance.new("Frame",window)
+			tab.Size=UDim2.fromOffset(200,50)
+			tab.Position=UDim2.fromOffset(amtoftabs*200+5,50)
+			tab.BackgroundColor3=uiclrset.primary
+			cornertab("top").Parent=tab
+			local UIDragger=Instance.new("UIDragDetector",tab)
+			UIDragger.CursorIcon="rbxasset://textures/cursors/KeyboardMouse/ArrowFarCursor.png"
+			UIDragger.ActivatedCursorIcon="rbxasset://textures/cursors/KeyboardMouse/ArrowFarCursor.png"
+			local List=Instance.new("UIListLayout",tab)
+			List.SortOrder=Enum.SortOrder.LayoutOrder
+			List.Padding=UDim.new(0,5)
+			local tframe=Instance.new("Frame",tab)
+			tframe.BackgroundTransparency=1
+			tframe.Size=UDim2.fromScale(1,1)
+			local logo1=Instance.new("TextLabel",tframe)
+			logo1.BackgroundTransparency=1
+			logo1.Size=UDim2.fromScale(.6,.9)
+			logo1.Position=UDim2.fromScale(.05,.5)
+			logo1.AnchorPoint=Vector2.new(0,.5)
+			logo1.TextColor3=Color3.new(1,1,1)
+			logo1.TextSize=12
+			logo1.Text=name2 or "tab"
+			tframe.Name=tostring(amtofstuff)
+			local minimize=Instance.new("TextButton",tframe)
+			minimize.Size=UDim2.fromOffset(30,30)
+			minimize.Position=UDim2.fromScale(.95,.5)
+			minimize.AnchorPoint=Vector2.new(1,.5)
+			minimize.BackgroundColor3=uiclrset.tertiary
+			minimize.TextColor3=Color3.new(1,1,1)
+			minimize.TextScaled=true
+			minimize.AutoButtonColor=false
+			cornertab("mid").Parent=minimize
+			minimize.Text="-"
+			minimize.MouseEnter:Connect(function()
+				tween(minimize,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{BackgroundColor3=uiclrset.ontertiary})
+			end)
+			minimize.MouseLeave:Connect(function()
+				tween(minimize,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{BackgroundColor3=uiclrset.tertiary})
+			end)
 
-            function toret3.button(name3)
-                local toret4={}
-                
-                local button=Instance.new("TextButton",tab)
-                button.BackgroundColor3=uiclrset.secondary
-                button.TextSize=12
-                button.Size=UDim2.fromScale(1,1)
-                button.Text=name3 or "button"
-                button.TextColor3=Color3.new(1,1,1)
-                button.Modal=true
-                Instance.new("UIScale",button).Name="scale"
-                if amtofstuff~=0 then
-                	tab[tostring(amtofstuff)].corner:Destroy()
-                    cornertab("mid").Parent=tab[tostring(amtofstuff)]
-                end
-                amtofstuff+=1
-                button.Name=tostring(amtofstuff)
-                cornertab("bot").Parent=button
-                if minimized then
-                	button.scale.Scale=0
-                else
-                    button.scale.Scale=0
-                    tween(button.scale,TweenInfo.new(.125,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{Scale=1})
-                end
-                toret4.clicked=button.MouseButton1Click
-                toret4.instance=button
-                
-                return toret4
-            end
-            function toret3.label(text1)
-            	local toret4={}
-            	local button=Instance.new("TextLabel",tab)
-                button.BackgroundColor3=uiclrset.neutralvariant
-                button.TextSize=12
-                if amtofstuff~=0 then
-                	tab[tostring(amtofstuff)].corner:Destroy()
-                    cornertab("mid").Parent=tab[tostring(amtofstuff)]
-                end
-                amtofstuff+=1
-                button.Name=tostring(amtofstuff)
-                cornertab("bot").Parent=button
-                button.Size=UDim2.fromScale(1,1)
-                button.TextColor3=Color3.new(1,1,1)
-                button.Text=text1 or "label"
-                Instance.new("UIScale",button).Name="scale"
-                if minimized then
-                	button.scale.Scale=0
-                else
-                    button.scale.Scale=0
-                    tween(button.scale,TweenInfo.new(.125,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{Scale=1})
-                end
-                toret4.instance=button
-                return toret4
-            end
+			minimize.MouseButton1Click:Connect(function()
+				if minimized then
+					for i=amtofstuff,1,-1 do
+						tween(tab[tostring(i)].scale,TweenInfo.new(.125,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{Scale=1})
+						task.wait(.1)
+					end
+					minimized=false
+				else
+					for i=amtofstuff,1,-1 do
+						tween(tab[tostring(i)].scale,TweenInfo.new(.125,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{Scale=0})
+						task.wait(.075)
+					end	
+					minimized=true
+				end
+			end)
 
-            return toret3
-        end
-        return toret2
-    end    
-    return toret1
+			amtoftabs+=1
+
+			function toret3.button(name3)
+				local toret4={}
+
+				local button=Instance.new("TextButton",tab)
+				button.BackgroundColor3=uiclrset.secondary
+				button.TextSize=12
+				button.Size=UDim2.fromScale(1,1)
+				button.Text=name3 or "button"
+				button.TextColor3=Color3.new(1,1,1)
+				button.Modal=true
+				Instance.new("UIScale",button).Name="scale"
+				if amtofstuff~=0 then
+					tab[tostring(amtofstuff)].corner:Destroy()
+					cornertab("mid").Parent=tab[tostring(amtofstuff)]
+				end
+				amtofstuff+=1
+				button.Name=tostring(amtofstuff)
+				cornertab("bot").Parent=button
+				if minimized then
+					button.scale.Scale=0
+				else
+					button.scale.Scale=0
+					tween(button.scale,TweenInfo.new(.125,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{Scale=1})
+				end
+				button.MouseEnter:Connect(function()
+					tween(button,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{BackgroundColor3=uiclrset.onsecondary})
+				end)
+				button.MouseLeave:Connect(function()
+					tween(button,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{BackgroundColor3=uiclrset.secondary})
+				end)
+				button.AutoButtonColor=false
+				toret4.clicked=button.MouseButton1Click
+				toret4.instance=button
+
+				return toret4
+			end
+			function toret3.toggle(name3)
+				local toret4={}
+				
+				toret4.state=false
+				toret4.changed=lib.newevent()
+				local button=Instance.new("TextButton",tab)
+				button.BackgroundColor3=uiclrset.tertiary
+				button.TextSize=12
+				button.Size=UDim2.fromScale(1,1)
+				button.Text=name3 or "button"
+				button.TextColor3=Color3.new(1,1,1)
+				button.Modal=true
+				Instance.new("UIScale",button).Name="scale"
+				if amtofstuff~=0 then
+					tab[tostring(amtofstuff)].corner:Destroy()
+					cornertab("mid").Parent=tab[tostring(amtofstuff)]
+				end
+				amtofstuff+=1
+				button.Name=tostring(amtofstuff)
+				cornertab("bot").Parent=button
+				if minimized then
+					button.scale.Scale=0
+				else
+					button.scale.Scale=0
+					tween(button.scale,TweenInfo.new(.125,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{Scale=1})
+				end
+				local function updateClr()
+					local onoff={["false"]=uiclrset.tertiary,["true"]=uiclrset.tertiarycontainer}
+					tween(button,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{BackgroundColor3=onoff[tostring(toret4.state)]})
+				end
+				button.MouseEnter:Connect(function()
+					tween(button,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{BackgroundColor3=uiclrset.ontertiary})
+				end)
+				button.MouseLeave:Connect(function()
+					local onoff={["false"]=uiclrset.tertiary,["true"]=uiclrset.tertiarycontainer}
+					tween(button,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{BackgroundColor3=onoff[tostring(toret4.state)]})
+				end)
+				button.MouseButton1Click:Connect(function()
+					if toret4.state then
+						toret4.state=false
+					else
+						toret4.state=true
+					end
+					toret4.changed:fire(toret4.state)
+					updateClr()
+				end)
+				button.AutoButtonColor=false
+				toret4.instance=button
+
+				return toret4
+			end
+			function toret3.label(text1)
+				local toret4={}
+				local button=Instance.new("TextLabel",tab)
+				button.BackgroundColor3=uiclrset.key.neutralvariant
+				button.TextSize=12
+				if amtofstuff~=0 then
+					tab[tostring(amtofstuff)].corner:Destroy()
+					cornertab("mid").Parent=tab[tostring(amtofstuff)]
+				end
+				amtofstuff+=1
+				button.Name=tostring(amtofstuff)
+				cornertab("bot").Parent=button
+				button.Size=UDim2.fromScale(1,1)
+				button.TextColor3=Color3.new(1,1,1)
+				button.Text=text1 or "label"
+				Instance.new("UIScale",button).Name="scale"
+				if minimized then
+					button.scale.Scale=0
+				else
+					button.scale.Scale=0
+					tween(button.scale,TweenInfo.new(.125,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{Scale=1})
+				end
+				toret4.instance=button
+				return toret4
+			end
+
+			return toret3
+		end
+		return toret2
+	end    
+	return toret1
+end
+
+function lib.newevent()
+	local funcs = {}
+	local funcToCall = {}
+	local funcadd = 1
+
+	function funcs:connect(func)
+		local address = tostring(funcadd)
+		funcToCall[address] = func
+		funcadd += 1
+
+		return {
+			Disconnect = function()
+				funcToCall[address] = nil
+			end
+		}
+	end
+
+	function funcs:once(func)
+		local connection
+		connection = funcs:Connect(function(...)
+			connection:Disconnect()
+			func(...)
+		end)
+		return connection
+	end
+
+	function funcs:fire(...)
+		for _, functionn in funcToCall do
+			if functionn then
+				local s, e = pcall(functionn, ...)
+				if not s then
+					warn("eventpp call fail: " .. tostring(e))
+				end
+			end
+		end
+	end
+
+	function funcs:disconnectall()
+		funcToCall = {}
+	end
+
+	function funcs:destroy()
+		funcToCall = {}
+		funcs = nil
+	end
+
+	return funcs
 end
 
 return lib
