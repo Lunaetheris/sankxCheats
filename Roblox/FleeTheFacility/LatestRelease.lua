@@ -5,17 +5,27 @@ local runs=game:GetService("RunService")
 local lplr=plrs.LocalPlayer
 local lib=loadstring(game:HttpGet('https://raw.githubusercontent.com/Lunaetheris/sankxCheats/refs/heads/main/Roblox/UIs/Element.lua'))()
 local init=lib.init()
-local win=init.window("Flee the fuckility","X")
+local win=init.window("Flee The Fuckility","X")
 local esp=win.tab("ESP")
 local aut=win.tab("Automation")
+local act=win.tab("Action")
+local vis=win.tab("Visuals")
 local cre=win.tab("Credits")
+
 local exec="Unidentified Executor"
 pcall(function()
 	exec=identifyexecutor()
 end)
 local re=rs.RemoteEvent
+
 local plrstats={
     "TempPlayerStatsModule","SavedPlayerStatsModule"
+}
+local credits={
+    "UI: "..lib.nver,
+    "Creator: Lunaetheris",
+    "Mental Support: Horaq",
+    "Executor: "..exec,
 }
 
 function getPlr(id)
@@ -88,7 +98,7 @@ local esps={
                     	local lighttoret={}
                         local light = Instance.new("Highlight",v)
                         lighttoret.instance=light
-                        task.wait(1)
+                        task.wait(.25)
                         local screen = v:FindFirstChild("Screen")
                         if screen then
                             pchighlightcolor(light,screen.Color)
@@ -106,7 +116,7 @@ local esps={
                     	local lighttoret={}
                         local light = Instance.new("Highlight",ins)
                         lighttoret.instance=light
-                        task.wait(1)
+                        task.wait(.25)
                         local screen = ins:FindFirstChild("Screen")
                         if screen then
                             pchighlightcolor(light,screen.Color)
@@ -201,6 +211,7 @@ local esps={
         	end
         end,
     },
+    
 }
 
 local auts={
@@ -256,6 +267,33 @@ local auts={
     }
 }
 
+local viss={
+    FOVChangeOnRespawn={
+        func=function()
+        	return lplr.CharacterAdded:Connect(function(char)
+        		local hum=char:WaitForChild("Humanoid")
+                workspace.CurrentCamera.CameraType=Enum.CameraType.Custom
+                workspace.CurrentCamera.CameraSubject=hum
+        		workspace.CurrentCamera.FieldOfView=80
+        		tween(workspace.CurrentCamera,TweenInfo.new(.25,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{FieldOfView=70})
+        	end)
+        end,
+        thread=nil,
+        cleanup=function()
+        	
+        end,
+    }
+}
+
+local acts={
+    ResetCharacter=function()
+    	local char=getChar(lplr)
+        if char then
+            char.Humanoid.Health=0
+        end
+    end,
+}
+
 function toggleESPthreadfor(type_)
 	local cesp=esps[type_]
     if cesp then
@@ -294,6 +332,25 @@ function toggleAUTthreadfor(type_)
     end
 end
 
+function toggleVISthreadfor(type_)
+	local cesp=viss[type_]
+    if cesp then
+    	if typeof(cesp.thread)~="RBXScriptConnection"then
+    		cesp.thread=cesp.func()
+            return true
+        else
+        	cesp.thread:Disconnect()
+            cesp.thread=nil
+            local s,e=pcall(cesp.cleanup)
+            if not s then
+            	warn("=== FLEE THE FUCKILITY ERROR ===")
+                warn(tostring(e))
+            end
+            return false
+    	end
+    end
+end
+
 --[[
 local debugwin=init.window("debug","RightShift")
 for _, splr in plrs:GetPlayers() do
@@ -303,48 +360,48 @@ for _, splr in plrs:GetPlayers() do
     	local v1=debugwin.tab(stat1..": "..splr.Name)
     	for _, i2 in i1:GetChildren() do
     		local label=v1.label(i2.Name..": "..tostring(i2.Value))
+            local ogclr=label.instance.BackgroundColor3
             i2:GetPropertyChangedSignal("Value"):Connect(function()
             	label.instance.Text=i2.Name..": "..tostring(i2.Value)
                 label.instance.BackgroundColor3=Color3.new(.5,.5,.5)
                 label.instance.TextWrapped=true
-                tween(label.instance,TweenInfo.new(.5,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{BackgroundColor3=Color3.new(1,1,1)})
+                tween(label.instance,TweenInfo.new(.5,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{BackgroundColor3=ogclr})
             end)
     	end
+        task.wait(.05)
     end
 end
 end]]
 
 for toggle, _ in esps do
-	local button = esp.button(toggle)
-    button.instance.BackgroundColor3=Color3.new(1,0,0)
-    button.clicked:Connect(function()
+	local button = esp.toggle(toggle)
+    button.changed:connect(function(stat)
     	local state=toggleESPthreadfor(toggle)
-        if state==true then
-        	button.instance.BackgroundColor3=Color3.new(0,1,0)
-        elseif state==false then
-            button.instance.BackgroundColor3=Color3.new(1,0,0)
-        elseif state==nil then
-            button.instance.BackgroundColor3=Color3.new(0,0,1)		
-        end
     end)
+    task.wait(.05)
 end
 
 for toggle, _ in auts do
-	local button = aut.button(toggle)
-    button.instance.BackgroundColor3=Color3.new(1,0,0)
-    button.clicked:Connect(function()
+	local button = aut.toggle(toggle)
+    button.changed:connect(function(stat)
     	local state=toggleAUTthreadfor(toggle)
-        if state==true then
-        	button.instance.BackgroundColor3=Color3.new(0,1,0)
-        elseif state==false then
-            button.instance.BackgroundColor3=Color3.new(1,0,0)
-        elseif state==nil then
-            button.instance.BackgroundColor3=Color3.new(0,0,1)		
-        end
     end)
+    task.wait(.05)
 end
 
-cre.label("UI: Element")
-cre.label("Creator: Luna")
-cre.label("Mental Support: Horaq")
-cre.label("Executor: "..exec)
+for toggle, _ in viss do
+	local button = vis.toggle(toggle)
+    button.changed:connect(function(stat)
+    	local state=toggleVISthreadfor(toggle)
+    end)
+    task.wait(.05)
+end
+
+for but, func in acts do
+	act.button(but).clicked:Connect(function()pcall(func)end)
+end
+
+for _, credit in credits do
+	cre.label(credit)
+    task.wait(.05)
+end
